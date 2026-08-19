@@ -1,1 +1,905 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Business Proposal – Car Scans</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.75;
+      color: #2c2c2c;
+      background: #f4f6f9;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 6px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #1a2e4a 0%, #2d5986 100%);
+      color: #ffffff;
+      padding: 50px 60px 40px;
+    }
+
+    .header .label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #a8c8f0;
+      margin-bottom: 10px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .header h2 {
+      font-size: 16px;
+      font-weight: 400;
+      color: #c8dff5;
+      margin-bottom: 36px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 28px;
+      margin-top: 10px;
+    }
+
+    .meta-item .meta-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #a8c8f0;
+      margin-bottom: 4px;
+    }
+
+    .meta-item .meta-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    /* ── BODY ── */
+    .body {
+      padding: 50px 60px;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #2d5986;
+      border-bottom: 2px solid #2d5986;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a2e4a;
+      margin: 24px 0 8px;
+    }
+
+    h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #2d5986;
+      margin: 20px 0 8px;
+    }
+
+    p {
+      margin-bottom: 14px;
+      color: #3a3a3a;
+    }
+
+    ul, ol {
+      padding-left: 22px;
+      margin-bottom: 14px;
+    }
+
+    ul li, ol li {
+      margin-bottom: 6px;
+      color: #3a3a3a;
+    }
+
+    /* ── CALLOUT / NOTE ── */
+    .note {
+      background: #eef4fb;
+      border-left: 4px solid #2d5986;
+      border-radius: 0 4px 4px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: #2c4a6e;
+    }
+
+    .note strong { color: #1a2e4a; }
+
+    .warning-note {
+      background: #fff8ec;
+      border-left: 4px solid #e8a020;
+      border-radius: 0 4px 4px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: #7a5000;
+    }
+
+    /* ── TABLES ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 14px;
+    }
+
+    thead tr {
+      background: #1a2e4a;
+      color: #ffffff;
+    }
+
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #f7f9fc;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #ffffff;
+    }
+
+    tbody tr:hover {
+      background: #eef4fb;
+    }
+
+    tbody td {
+      padding: 11px 16px;
+      border-bottom: 1px solid #e8edf4;
+      color: #3a3a3a;
+      vertical-align: top;
+    }
+
+    tbody tr.total-row {
+      background: #1a2e4a !important;
+      color: #ffffff;
+    }
+
+    tbody tr.total-row td {
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 15px;
+      border-bottom: none;
+    }
+
+    tbody tr.subtotal-row {
+      background: #e8edf4 !important;
+    }
+
+    tbody tr.subtotal-row td {
+      font-weight: 700;
+      color: #1a2e4a;
+    }
+
+    tbody tr.discount-row {
+      background: #fff3f3 !important;
+    }
+
+    tbody tr.discount-row td {
+      font-weight: 700;
+      color: #c0392b;
+    }
+
+    tbody tr.phase-total td {
+      font-weight: 700;
+      background: #eef4fb;
+      color: #1a2e4a;
+    }
+
+    td s { color: #999; }
+
+    /* ── FEATURE CARDS ── */
+    .feature-card {
+      border: 1px solid #dde4ef;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .feature-card-header {
+      background: #eef4fb;
+      padding: 12px 18px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #1a2e4a;
+      border-bottom: 1px solid #dde4ef;
+    }
+
+    .feature-card-body {
+      padding: 14px 18px;
+    }
+
+    .feature-card-body ul {
+      margin: 0;
+    }
+
+    /* ── PHASE BLOCKS ── */
+    .phase-block {
+      border: 1px solid #dde4ef;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .phase-block-header {
+      background: linear-gradient(90deg, #1a2e4a, #2d5986);
+      color: #ffffff;
+      padding: 13px 20px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .phase-block-header .phase-subtitle {
+      font-size: 12px;
+      font-weight: 400;
+      color: #c8dff5;
+      margin-top: 2px;
+    }
+
+    .phase-block table {
+      margin: 0;
+    }
+
+    .phase-block thead tr { background: #2d5986; }
+
+    /* ── COST HIGHLIGHT BOX ── */
+    .cost-highlight {
+      background: linear-gradient(135deg, #1a2e4a, #2d5986);
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 28px 36px;
+      margin-top: 24px;
+    }
+
+    .cost-highlight .cost-label {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #a8c8f0;
+      margin-bottom: 6px;
+    }
+
+    .cost-highlight .cost-value {
+      font-size: 42px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    /* ── TIMELINE ── */
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+      margin: 20px 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 9px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #dde4ef;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -25px;
+      top: 6px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #2d5986;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 0 2px #2d5986;
+    }
+
+    .timeline-item.total::before {
+      background: #1a2e4a;
+      box-shadow: 0 0 0 2px #1a2e4a;
+      width: 14px;
+      height: 14px;
+      left: -26px;
+    }
+
+    .timeline-phase {
+      font-weight: 700;
+      font-size: 14px;
+      color: #1a2e4a;
+    }
+
+    .timeline-meta {
+      font-size: 13px;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .timeline-duration {
+      display: inline-block;
+      background: #eef4fb;
+      color: #2d5986;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 2px 10px;
+      border-radius: 12px;
+      margin-top: 4px;
+    }
+
+    .timeline-item.total .timeline-duration {
+      background: #1a2e4a;
+      color: #ffffff;
+      font-size: 13px;
+      padding: 4px 14px;
+    }
+
+    /* ── NEXT STEPS ── */
+    .next-steps ol {
+      padding-left: 0;
+      list-style: none;
+      counter-reset: steps;
+    }
+
+    .next-steps ol li {
+      counter-increment: steps;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+
+    .next-steps ol li::before {
+      content: counter(steps);
+      background: #2d5986;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 13px;
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #1a2e4a;
+      color: #a8c8f0;
+      padding: 28px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .footer .contact strong {
+      display: block;
+      color: #ffffff;
+      font-size: 15px;
+      margin-bottom: 2px;
+    }
+
+    .footer .confidential {
+      font-size: 12px;
+      color: #6a8aac;
+      text-align: right;
+    }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(90deg, #1a2e4a, #2d5986);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .ai-badge::before {
+      content: '✦';
+      font-size: 10px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #e4eaf2;
+      margin: 36px 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="label">Business Proposal</div>
+    <h1>Car Scans</h1>
+    <h2>OCR Document Processing &amp; PDF Generation Web Application</h2>
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">Prepared By</div>
+        <div class="meta-value">Jacques Ramsden</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Prepared For</div>
+        <div class="meta-value">Car Scans</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Date</div>
+        <div class="meta-value">19 August 2026</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Version</div>
+        <div class="meta-value">1.0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- 1. Executive Summary -->
+    <div class="section">
+      <div class="section-title">1. Executive Summary</div>
+      <p>This proposal outlines the scope of work, technical approach, project phases, and cost estimate for the design and development of <strong>Car Scans</strong> — a web-based OCR (Optical Character Recognition) Document Processing and PDF Generation application.</p>
+      <p>Car Scans will allow end-users to submit one or more document images via drag-and-drop or folder selection. The system will automatically extract structured data from those images using an integrated AI-powered OCR engine, flag items that require human review, allow users to validate uncertain data in an intuitive interface, and finally generate professionally formatted PDF outputs for each processed document.</p>
+      <div class="ai-badge">Integrated AI</div>
+      <p>At the core of Car Scans is an embedded <strong>Machine Learning model</strong> that performs intelligent image recognition and text extraction, enabling the system to understand and interpret document content without any manual data capture. This gives Car Scans its AI-driven capability to process, classify, and validate document data automatically.</p>
+      <p>This is a single-website deliverable with a well-defined set of features designed to streamline document processing workflows and significantly reduce manual data entry.</p>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 2. Project Objectives -->
+    <div class="section">
+      <div class="section-title">2. Project Objectives</div>
+      <ul>
+        <li>Enable efficient, bulk image upload via drag-and-drop or folder selection.</li>
+        <li>Leverage integrated AI and Machine Learning to automate data extraction from uploaded images.</li>
+        <li>Classify extracted data by confidence level (High Accuracy vs. Needs Review).</li>
+        <li>Provide a human-in-the-loop review interface for low-confidence documents.</li>
+        <li>Generate standardised, pre-formatted PDF output for all validated documents.</li>
+        <li>Deliver a user-friendly single-page web application.</li>
+      </ul>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 3. Scope of Work -->
+    <div class="section">
+      <div class="section-title">3. Scope of Work</div>
+      <h3>3.1 Feature Breakdown</h3>
+
+      <div class="feature-card">
+        <div class="feature-card-header">Feature 1 – Image Upload Interface</div>
+        <div class="feature-card-body">
+          <ul>
+            <li>Drag-and-drop zone supporting single or multiple image uploads simultaneously.</li>
+            <li>Folder selection support allowing users to select an entire folder of images.</li>
+            <li>Supported formats: JPG, PNG, TIFF, BMP.</li>
+            <li>Upload progress indicators per file.</li>
+            <li>Validation of file types and sizes with clear error messaging.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-header">Feature 2 – AI-Powered OCR Processing Engine</div>
+        <div class="feature-card-body">
+          <ul>
+            <li>OCR processing is powered by <strong>EasyOCR</strong> — an open-source Python-based OCR library that uses pre-trained <strong>Machine Learning models</strong> (built on PyTorch/deep learning) to perform intelligent image recognition and text extraction.</li>
+            <li>EasyOCR operates as the system's <strong>integrated AI engine</strong>, analysing each image and identifying text regions, fields, and values through neural network-based recognition — with no cloud per-call API costs, as all processing runs locally on the server.</li>
+            <li>EasyOCR supports 80+ languages and delivers strong accuracy across varied fonts, layouts, and real-world document types.</li>
+            <li>Per-detection confidence scores are returned natively by the ML model, feeding directly into the High Accuracy / Needs Review classification logic.</li>
+            <li>Automatic field and value detection from each image.</li>
+            <li>Mapping of detected fields/values to a predefined data object/form structure.</li>
+            <li>Batch processing support for multiple images.</li>
+            <li>Processing status indicators (queued, processing, done).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-header">Feature 3 – Confidence Level Classification</div>
+        <div class="feature-card-body">
+          <ul>
+            <li>Per-field confidence scoring returned from the EasyOCR ML engine.</li>
+            <li>Documents where all fields meet a 100% confidence threshold are automatically marked as <strong>High Accuracy</strong>.</li>
+            <li>Documents where one or more fields fall below the confidence threshold are marked as <strong>Needs Review</strong>.</li>
+            <li>Confidence metadata stored per document object.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-header">Feature 4 – Document Processing Results Dashboard</div>
+        <div class="feature-card-body">
+          <ul>
+            <li>A results list view displaying all processed images.</li>
+            <li>Each entry displays: filename, processing status, and accuracy classification (High Accuracy / Needs Review).</li>
+            <li>High Accuracy documents are clearly indicated as ready for output — no further user action required.</li>
+            <li>Needs Review documents are flagged and actionable.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-header">Feature 5 – Human Review &amp; Validation Interface</div>
+        <div class="feature-card-body">
+          <ul>
+            <li>For each "Needs Review" document, the user can open a split-view or overlay review screen.</li>
+            <li>The original image is displayed alongside the extracted form data.</li>
+            <li>Fields that did not meet the confidence threshold are visually highlighted (e.g., coloured bounding boxes drawn over the image at the location of the uncertain field).</li>
+            <li>The user can correct or confirm each highlighted field value.</li>
+            <li>Once all uncertain fields are confirmed, the document is marked as validated.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-card-header">Feature 6 – PDF Generation</div>
+        <div class="feature-card-body">
+          <ul>
+            <li>A "Generate PDF Outputs" button available once all documents are either High Accuracy or manually validated.</li>
+            <li>Each document object is rendered into a predefined, branded PDF template.</li>
+            <li>All PDFs are generated and made available for download (individually or as a ZIP archive).</li>
+            <li>PDF output format and layout are defined in collaboration with the client prior to development.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 4. Technical Approach -->
+    <div class="section">
+      <div class="section-title">4. Technical Approach</div>
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Technology (Recommended)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Frontend Framework</td><td>Vue.js</td></tr>
+          <tr><td>Drag &amp; Drop</td><td>Native HTML5 File API</td></tr>
+          <tr><td>AI / OCR Engine</td><td>EasyOCR (local, open-source, Python/PyTorch ML models, no cloud per-call API costs)</td></tr>
+          <tr><td>Backend / API</td><td>Python with FastAPI</td></tr>
+          <tr><td>Local Server</td><td>WAMP / XAMPP or equivalent local server stack</td></tr>
+          <tr><td>PDF Generation</td><td>ReportLab / WeasyPrint</td></tr>
+        </tbody>
+      </table>
+      <div class="note">
+        <strong>Note:</strong> Final technology choices will be confirmed with the client prior to development commencement. EasyOCR's Machine Learning models run entirely locally on the server with no third-party API dependency, eliminating any per-call costs. The Python/FastAPI backend is the natural fit for EasyOCR's PyTorch ML runtime and will be served via a local server stack such as WAMP.
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 5. Project Phases -->
+    <div class="section">
+      <div class="section-title">5. Project Phases &amp; Effort Estimates</div>
+
+      <div class="phase-block">
+        <div class="phase-block-header">
+          Phase 1 – Discovery &amp; Technical Design
+          <div class="phase-subtitle">Understanding requirements in detail, finalising the data object/form schema, PDF template design, and technical architecture planning.</div>
+        </div>
+        <table>
+          <thead><tr><th>Task</th><th>Estimated Hours</th></tr></thead>
+          <tbody>
+            <tr><td>Requirements Gathering</td><td>1 hr</td></tr>
+            <tr><td>Data object / form schema definition</td><td>3 hrs</td></tr>
+            <tr><td>PDF output template design &amp; sign-off</td><td>3 hrs</td></tr>
+            <tr><td>Technical architecture &amp; API design</td><td>4 hrs</td></tr>
+            <tr class="phase-total"><td><strong>Phase 1 Total</strong></td><td><strong>11 hrs</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-block-header">
+          Phase 2 – Frontend Development
+          <div class="phase-subtitle">Building the user-facing web application.</div>
+        </div>
+        <table>
+          <thead><tr><th>Task</th><th>Estimated Hours</th></tr></thead>
+          <tbody>
+            <tr><td>Project setup, scaffolding &amp; component library</td><td>2 hrs</td></tr>
+            <tr><td>Drag-and-drop upload interface &amp; folder selection</td><td>6 hrs</td></tr>
+            <tr><td>Upload progress &amp; file validation UI</td><td>3 hrs</td></tr>
+            <tr><td>Document processing results dashboard</td><td>6 hrs</td></tr>
+            <tr><td>Confidence-level status indicators &amp; badges</td><td>2 hrs</td></tr>
+            <tr><td>Human review interface (split view / overlay)</td><td>6 hrs</td></tr>
+            <tr><td>Field highlighting &amp; bounding box rendering on images</td><td>8 hrs</td></tr>
+            <tr><td>Field correction / confirmation UI</td><td>2 hrs</td></tr>
+            <tr><td>Generate PDF button &amp; download handling</td><td>3 hrs</td></tr>
+            <tr><td>Responsive design &amp; cross-browser testing <em>(optional — can be omitted if the system is to support desktop Chromium-only browsers)</em></td><td>5 hrs</td></tr>
+            <tr class="phase-total"><td><strong>Phase 2 Total</strong></td><td><strong>45 hrs</strong> <em>(or <strong>40 hrs</strong> if responsive design &amp; cross-browser testing is omitted)</em></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-block-header">
+          Phase 3 – Backend Development &amp; AI/OCR Integration
+          <div class="phase-subtitle">Building the server-side processing logic and integrating the EasyOCR ML engine.</div>
+        </div>
+        <table>
+          <thead><tr><th>Task</th><th>Estimated Hours</th></tr></thead>
+          <tbody>
+            <tr><td>Backend project setup &amp; FastAPI scaffolding</td><td>3 hrs</td></tr>
+            <tr><td>Image upload handling &amp; local storage integration</td><td>5 hrs</td></tr>
+            <tr><td>EasyOCR ML model integration &amp; field extraction logic</td><td>10 hrs</td></tr>
+            <tr><td>Confidence scoring &amp; classification logic</td><td>5 hrs</td></tr>
+            <tr><td>Data object mapping &amp; form schema population</td><td>6 hrs</td></tr>
+            <tr><td>Batch processing queue management</td><td>5 hrs</td></tr>
+            <tr><td>Review &amp; validation API endpoints</td><td>4 hrs</td></tr>
+            <tr><td>PDF generation engine integration &amp; template implementation</td><td>8 hrs</td></tr>
+            <tr><td>ZIP packaging &amp; file download endpoints</td><td>3 hrs</td></tr>
+            <tr class="phase-total"><td><strong>Phase 3 Total</strong></td><td><strong>49 hrs</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-block-header">
+          Phase 4 – Testing &amp; Quality Assurance
+          <div class="phase-subtitle">Ensuring the system works correctly, reliably, and handles edge cases gracefully.</div>
+        </div>
+        <table>
+          <thead><tr><th>Task</th><th>Estimated Hours</th></tr></thead>
+          <tbody>
+            <tr><td>Unit &amp; integration testing (backend)</td><td>6 hrs</td></tr>
+            <tr><td>Frontend component testing</td><td>4 hrs</td></tr>
+            <tr><td>End-to-end workflow testing</td><td>6 hrs</td></tr>
+            <tr><td>AI/OCR accuracy validation with real document samples</td><td>5 hrs</td></tr>
+            <tr><td>Performance testing (bulk image uploads)</td><td>3 hrs</td></tr>
+            <tr><td>Bug fixing &amp; refinements</td><td>6 hrs</td></tr>
+            <tr class="phase-total"><td><strong>Phase 4 Total</strong></td><td><strong>30 hrs</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-block-header">
+          Phase 5 – Deployment &amp; Handover <em style="font-weight:400; color:#a8dfc0;">(Complimentary — No Charge)</em>
+          <div class="phase-subtitle">Deploying the solution to the local server environment and handing over documentation.</div>
+        </div>
+        <table>
+          <thead><tr><th>Task</th><th>Estimated Hours</th></tr></thead>
+          <tbody>
+            <tr><td>Local server environment setup &amp; deployment (WAMP or equivalent)</td><td>5 hrs</td></tr>
+            <tr><td>CI/CD pipeline configuration</td><td>3 hrs</td></tr>
+            <tr><td>User acceptance testing (UAT) support</td><td>4 hrs</td></tr>
+            <tr><td>Technical documentation &amp; user guide</td><td>4 hrs</td></tr>
+            <tr><td>Knowledge transfer session</td><td>2 hrs</td></tr>
+            <tr class="phase-total"><td><strong>Phase 5 Total</strong></td><td><strong>18 hrs</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 6. Cost Estimate -->
+    <div class="section">
+      <div class="section-title">6. Cost Estimate Summary</div>
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>Hours</th><th>Rate (per hr)</th><th>Estimated Cost</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Phase 1 – Discovery &amp; Technical Design</td><td>11 hrs</td><td>R500</td><td>R5,500</td></tr>
+          <tr><td>Phase 2 – Frontend Development</td><td>40 hrs</td><td>R500</td><td>R20,000</td></tr>
+          <tr><td>Phase 3 – Backend Development &amp; AI/OCR Integration</td><td>49 hrs</td><td>R500</td><td>R24,500</td></tr>
+          <tr><td>Phase 4 – Testing &amp; Quality Assurance</td><td>30 hrs</td><td>R500</td><td>R15,000</td></tr>
+          <tr><td>Phase 5 – Deployment &amp; Handover</td><td>18 hrs</td><td><s>R500</s> <strong>R0</strong> <em>(discounted — valued at R9,000)</em></td><td><strong>R0</strong></td></tr>
+          <tr class="subtotal-row"><td><strong>Subtotal (Full Project Value)</strong></td><td><strong>148 hrs</strong></td><td></td><td><s>R65,000</s></td></tr>
+          <tr class="discount-row"><td><strong>Project Discount</strong></td><td></td><td></td><td><strong>− R30,000</strong></td></tr>
+          <tr class="total-row"><td><strong>TOTAL PROJECT ESTIMATE</strong></td><td><strong>148 hrs</strong></td><td></td><td><strong>R35,000</strong></td></tr>
+        </tbody>
+      </table>
+
+      <div class="cost-highlight">
+        <div>
+          <div class="cost-label">Total Project Price</div>
+          <div class="cost-value">R35,000</div>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top:16px;">
+        The full project value of R65,000 reflects the standard rate for all billable phases. A project discount of R30,000 has been applied, bringing the total to a fixed price of <strong>R35,000</strong>. Responsive design &amp; cross-browser testing has been excluded in favour of desktop Chromium-only browser support.
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 7. Third-Party Costs -->
+    <div class="section">
+      <div class="section-title">7. Third-Party &amp; Operational Costs (Ongoing — Client Responsibility)</div>
+      <p>The following costs are <strong>not included</strong> in the above estimate and will be borne by the client as ongoing operational expenses:</p>
+      <div class="note">
+        <strong>Note:</strong> Because the system runs locally and the AI/OCR processing is handled entirely on-premises via EasyOCR's ML models, there are no recurring cloud hosting or API costs. The only potential ongoing cost is local server hardware maintenance, which is the responsibility of the client.
+      </div>
+      <table>
+        <thead><tr><th>Item</th><th>Estimated Cost</th></tr></thead>
+        <tbody>
+          <tr><td>Local server hardware &amp; maintenance</td><td>Client responsibility</td></tr>
+          <tr><td>WAMP / local server stack</td><td>Free (open-source)</td></tr>
+          <tr><td>EasyOCR &amp; Python dependencies</td><td>Free (open-source)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 8. Assumptions & Exclusions -->
+    <div class="section">
+      <div class="section-title">8. Assumptions &amp; Exclusions</div>
+      <h3>Assumptions</h3>
+      <ul>
+        <li>The client will provide sample documents and define the expected data object/form schema during Phase 1.</li>
+        <li>The predefined PDF output template design will be approved by the client no later than the end of Phase 1.</li>
+        <li>The system will be deployed and run locally on a WAMP or equivalent local server stack.</li>
+        <li>The client will provide timely feedback during UAT (within 5 business days).</li>
+        <li>The system is intended for desktop use on Chromium-based browsers. Responsive design and cross-browser support are not included in this proposal.</li>
+      </ul>
+      <h3>Exclusions</h3>
+      <ul>
+        <li>Mobile native application development (iOS / Android).</li>
+        <li>User authentication and account management.</li>
+        <li>Responsive design &amp; cross-browser support (desktop Chromium-only).</li>
+        <li>Integration with third-party systems (e.g., ERP, CRM, DMS) unless scoped separately.</li>
+        <li>Ongoing maintenance and support post-handover (available under a separate support agreement).</li>
+      </ul>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 9. Proposed Timeline -->
+    <div class="section">
+      <div class="section-title">9. Proposed Timeline</div>
+      <div class="warning-note">
+        <strong>Important note on scheduling:</strong> This project will be developed on an <strong>after-hours basis</strong>, with an average availability of <strong>9 hours per week</strong> allocated to the project. All phase durations below reflect this constraint and are calculated accordingly.
+        <br/><br/>
+        Additionally, as this is an after-hours engagement, it is acknowledged that <strong>personal or professional blockers may occasionally arise</strong> that could impact progress. Every effort will be made to proactively communicate any such delays and to minimise disruption to the overall delivery schedule. The utmost care will be taken to mitigate delays and prevent project derailment.
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-phase">Phase 1 – Discovery &amp; Technical Design</div>
+          <div class="timeline-meta">11 hrs &nbsp;·&nbsp; 9 hrs/week</div>
+          <div class="timeline-duration">~1.5 weeks</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Phase 2 – Frontend Development</div>
+          <div class="timeline-meta">40 hrs &nbsp;·&nbsp; 9 hrs/week</div>
+          <div class="timeline-duration">~4.5 weeks</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Phase 3 – Backend Development &amp; AI/OCR Integration</div>
+          <div class="timeline-meta">49 hrs &nbsp;·&nbsp; 9 hrs/week</div>
+          <div class="timeline-duration">~5.5 weeks</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Phase 4 – Testing &amp; Quality Assurance</div>
+          <div class="timeline-meta">30 hrs &nbsp;·&nbsp; 9 hrs/week</div>
+          <div class="timeline-duration">~3.5 weeks</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-phase">Phase 5 – Deployment &amp; Handover</div>
+          <div class="timeline-meta">18 hrs &nbsp;·&nbsp; 9 hrs/week</div>
+          <div class="timeline-duration">~2 weeks</div>
+        </div>
+        <div class="timeline-item total">
+          <div class="timeline-phase">Total Estimated Duration</div>
+          <div class="timeline-meta">148 hrs &nbsp;·&nbsp; 9 hrs/week average</div>
+          <div class="timeline-duration">~17 weeks (~4 months)</div>
+        </div>
+      </div>
+
+      <div class="note">
+        Phases are planned to run sequentially given the after-hours, single-resource nature of this engagement. Should additional availability become possible at any point, phases may be accelerated accordingly.
+      </div>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 10. Terms & Conditions -->
+    <div class="section">
+      <div class="section-title">10. Terms &amp; Conditions</div>
+      <ul>
+        <li>This proposal is valid for <strong>30 days</strong> from the date of issue.</li>
+        <li>Any changes to scope after project commencement will be managed via a formal change request process and may impact cost and timeline.</li>
+        <li>Intellectual property of all custom-developed code will transfer to the client upon final payment.</li>
+      </ul>
+    </div>
+
+    <hr class="divider"/>
+
+    <!-- 11. Next Steps -->
+    <div class="section">
+      <div class="section-title">11. Next Steps</div>
+      <div class="next-steps">
+        <ol>
+          <li>Review this proposal and provide any questions or feedback.</li>
+          <li>Agree on and confirm total project budget.</li>
+          <li>Schedule Phase 1 requirements gathering session.</li>
+        </ol>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="contact">
+      <strong>Jacques Ramsden</strong>
+      For any questions regarding this proposal, please get in touch.
+    </div>
+    <div class="confidential">
+      Confidential &amp; Proprietary<br/>
+      Prepared exclusively for Ash Govender
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>
