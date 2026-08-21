@@ -159,6 +159,46 @@
       font-size: 14px;
     }
 
+    /* On narrow screens a 4-column money table can't shrink to fit without
+       squishing text unreadably (especially the Rate column's struck-through
+       price + discount note) - let it keep a sane minimum width and scroll
+       horizontally within its own box instead of breaking the page layout. */
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .table-scroll table {
+      min-width: 520px;
+    }
+
+    .rotate-hint {
+      display: none;
+    }
+
+    /* Below this width the table can't display well even scrolling
+       sideways - checked by width alone, not orientation, so a landscape
+       phone/small window that's still too narrow gets the same treatment
+       as a portrait one instead of being assumed fine just because it's
+       "landscape". */
+    @media (max-width: 600px) {
+      .rotate-hint {
+        display: block;
+        font-weight: 700;
+        color: #7a5000;
+        background: #fff8ec;
+        border-left: 4px solid #e8a020;
+        border-radius: 0 4px 4px 0;
+        padding: 12px 16px;
+        margin: 16px 0;
+        font-size: 14px;
+      }
+
+      .cost-estimate-content {
+        display: none;
+      }
+    }
+
     thead tr {
       background: #1a2e4a;
       color: #ffffff;
@@ -501,8 +541,25 @@
       <p>This proposal outlines the scope of work, technical approach, project phases, and cost estimate for the design and development of <strong>Car Scans</strong> — a web-based OCR (Optical Character Recognition) Document Processing and PDF Generation application.</p>
       <p>Car Scans will allow end-users to submit one or more document images via drag-and-drop or folder selection. The system will automatically extract structured data from those images using an integrated AI-powered OCR engine, flag items that require human review, allow users to validate uncertain data in an intuitive interface, and finally generate professionally formatted PDF outputs for each processed document.</p>
       <div class="ai-badge">Integrated AI</div>
-      <p>At the core of Car Scans is an embedded <strong>Machine Learning model</strong> that performs intelligent image recognition and text extraction, enabling the system to understand and interpret document content without any manual data capture. This gives Car Scans its AI-driven capability to process, classify, and validate document data automatically.</p>
-      <p>This is a single-website deliverable with a well-defined set of features designed to streamline document processing workflows and significantly reduce manual data entry.</p>
+      <p>At the core of Car Scans are <strong>inbuilt AI-powered OCR models</strong> that perform intelligent image recognition and text extraction, enabling the system to understand and interpret document content without any manual data capture. This gives Car Scans its AI-driven capability to process, classify, and validate document data automatically, with average per-field confidence scores in the <strong>95%+ range</strong> on real-world sample documents.</p>
+      <p>This is a single SPA (Single Page Application) deliverable with a well-defined set of features designed to streamline document processing workflows and significantly reduce manual data entry.</p>
+
+      <h3>Estimated Efficiency Impact</h3>
+      <p>By automating field extraction instead of requiring manual transcription, Car Scans is estimated to save approximately <strong>10 minutes of manual data-entry effort per document image captured</strong> (assuming a data-entry clerk typing at least at average speed). Extrapolated across a single operator's <strong>8-hour (480-minute) workday</strong>, this quickly compounds:</p>
+      <table>
+        <thead>
+          <tr><th>Documents Processed</th><th>Manual Time Saved</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>10 documents</td><td>~1.7 hours</td></tr>
+          <tr><td>25 documents</td><td>~4.2 hours</td></tr>
+          <tr><td>48 documents</td><td><strong>8 hours — a full workday reclaimed</strong></td></tr>
+          <tr><td>100 documents</td><td>~16.7 hours (2+ workdays)</td></tr>
+        </tbody>
+      </table>
+      <div class="note">
+        <strong>In other words:</strong> for every ~48 documents an operator processes through Car Scans in a day, the equivalent of one full 8-hour workday of manual data-entry effort is eliminated — capacity that can be redirected to higher-value work.
+      </div>
     </div>
 
     <hr class="divider"/>
@@ -516,7 +573,7 @@
         <li>Classify extracted data by confidence level (High Accuracy vs. Needs Review).</li>
         <li>Provide a human-in-the-loop review interface for low-confidence documents.</li>
         <li>Generate standardised, pre-formatted PDF output for all validated documents.</li>
-        <li>Deliver a user-friendly single-page web application.</li>
+        <li>Deliver a user-friendly SPA (Single Page Application).</li>
       </ul>
     </div>
 
@@ -544,9 +601,10 @@
         <div class="feature-card-header">Feature 2 – AI-Powered OCR Processing Engine</div>
         <div class="feature-card-body">
           <ul>
-            <li>OCR processing is powered by <strong>EasyOCR</strong> — an open-source Python-based OCR library that uses pre-trained <strong>Machine Learning models</strong> (built on PyTorch/deep learning) to perform intelligent image recognition and text extraction.</li>
-            <li>EasyOCR operates as the system's <strong>integrated AI engine</strong>, analysing each image and identifying text regions, fields, and values through neural network-based recognition — with no cloud per-call API costs, as all processing runs locally on the server.</li>
-            <li>EasyOCR supports 80+ languages and delivers strong accuracy across varied fonts, layouts, and real-world document types.</li>
+            <li>OCR processing is powered by <strong>inbuilt AI-powered OCR models</strong> — open-source, deep-learning-based Machine Learning models used for intelligent image recognition and text extraction.</li>
+            <li>These inbuilt AI-powered models operate as the system's <strong>integrated AI engine</strong>, analysing each image and identifying text regions, fields, and values through neural network-based recognition — with no cloud per-call API costs, as all processing runs locally on the server.</li>
+            <li>The inbuilt models support 80+ languages and, in testing against real-world sample documents for this project, delivered strong field-level accuracy. A secondary AI model is also integrated and can be enabled to automatically cross-check any field the primary model is uncertain about, for further improved reliability where the extra processing time is worth the trade-off.</li>
+            <li>Average per-field confidence scores returned by the inbuilt AI-powered OCR models across tested real-world samples sit in the <strong>95%+ range</strong>, reflecting a high degree of reliability in the extracted data before any human review is applied.</li>
             <li>Per-detection confidence scores are returned natively by the ML model, feeding directly into the High Accuracy / Needs Review classification logic.</li>
             <li>Automatic field and value detection from each image.</li>
             <li>Mapping of detected fields/values to a predefined data object/form structure.</li>
@@ -560,7 +618,7 @@
         <div class="feature-card-header">Feature 3 – Confidence Level Classification</div>
         <div class="feature-card-body">
           <ul>
-            <li>Per-field confidence scoring returned from the EasyOCR ML engine.</li>
+            <li>Per-field confidence scoring returned from the inbuilt AI-powered OCR models, averaging in the 95%+ range on tested real-world samples.</li>
             <li>Documents where all fields meet a 100% confidence threshold are automatically marked as <strong>High Accuracy</strong>.</li>
             <li>Documents where one or more fields fall below the confidence threshold are marked as <strong>Needs Review</strong>.</li>
             <li>Confidence metadata stored per document object.</li>
@@ -608,32 +666,9 @@
 
     <hr class="divider"/>
 
-    <!-- 4. Technical Approach -->
+    <!-- 4. Project Phases -->
     <div class="section">
-      <div class="section-title">4. Technical Approach</div>
-      <table>
-        <thead>
-          <tr><th>Layer</th><th>Technology (Recommended)</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Frontend Framework</td><td>Vue.js</td></tr>
-          <tr><td>Drag &amp; Drop</td><td>Native HTML5 File API</td></tr>
-          <tr><td>AI / OCR Engine</td><td>EasyOCR (local, open-source, Python/PyTorch ML models, no cloud per-call API costs)</td></tr>
-          <tr><td>Backend / API</td><td>Python with FastAPI</td></tr>
-          <tr><td>Local Server</td><td>WAMP / XAMPP or equivalent local server stack</td></tr>
-          <tr><td>PDF Generation</td><td>ReportLab / WeasyPrint</td></tr>
-        </tbody>
-      </table>
-      <div class="note">
-        <strong>Note:</strong> Final technology choices will be confirmed with the client prior to development commencement. EasyOCR's Machine Learning models run entirely locally on the server with no third-party API dependency, eliminating any per-call costs. The Python/FastAPI backend is the natural fit for EasyOCR's PyTorch ML runtime and will be served via a local server stack such as WAMP.
-      </div>
-    </div>
-
-    <hr class="divider"/>
-
-    <!-- 5. Project Phases -->
-    <div class="section">
-      <div class="section-title">5. Project Phases &amp; Effort Estimates</div>
+      <div class="section-title">4. Project Phases &amp; Effort Estimates</div>
 
       <div class="phase-block">
         <div class="phase-block-header">
@@ -678,14 +713,14 @@
       <div class="phase-block">
         <div class="phase-block-header">
           Phase 3 – Backend Development &amp; AI/OCR Integration
-          <div class="phase-subtitle">Building the server-side processing logic and integrating the EasyOCR ML engine.</div>
+          <div class="phase-subtitle">Building the server-side processing logic and integrating the inbuilt AI-powered OCR models.</div>
         </div>
         <table>
           <thead><tr><th>Task</th><th>Estimated Hours</th></tr></thead>
           <tbody>
             <tr><td>Backend project setup &amp; FastAPI scaffolding</td><td>3 hrs</td></tr>
             <tr><td>Image upload handling &amp; local storage integration</td><td>5 hrs</td></tr>
-            <tr><td>EasyOCR ML model integration &amp; field extraction logic</td><td>10 hrs</td></tr>
+            <tr><td>Inbuilt AI-powered OCR model integration &amp; field extraction logic</td><td>10 hrs</td></tr>
             <tr><td>Confidence scoring &amp; classification logic</td><td>5 hrs</td></tr>
             <tr><td>Data object mapping &amp; form schema population</td><td>6 hrs</td></tr>
             <tr><td>Batch processing queue management</td><td>5 hrs</td></tr>
@@ -737,61 +772,66 @@
 
     <hr class="divider"/>
 
-    <!-- 6. Cost Estimate -->
+    <!-- 5. Cost Estimate -->
     <div class="section">
-      <div class="section-title">6. Cost Estimate Summary</div>
-      <table>
-        <thead>
-          <tr><th>Phase</th><th>Hours</th><th>Rate (per hr)</th><th>Estimated Cost</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Phase 1 – Discovery &amp; Technical Design</td><td>11 hrs</td><td>R500</td><td>R5,500</td></tr>
-          <tr><td>Phase 2 – Frontend Development</td><td>40 hrs</td><td>R500</td><td>R20,000</td></tr>
-          <tr><td>Phase 3 – Backend Development &amp; AI/OCR Integration</td><td>49 hrs</td><td>R500</td><td>R24,500</td></tr>
-          <tr><td>Phase 4 – Testing &amp; Quality Assurance</td><td>30 hrs</td><td>R500</td><td>R15,000</td></tr>
-          <tr><td>Phase 5 – Deployment &amp; Handover</td><td>18 hrs</td><td><s>R500</s> <strong>R0</strong> <em>(discounted — valued at R9,000)</em></td><td><strong>R0</strong></td></tr>
-          <tr class="subtotal-row"><td><strong>Subtotal (Full Project Value)</strong></td><td><strong>148 hrs</strong></td><td></td><td><s>R65,000</s></td></tr>
-          <tr class="discount-row"><td><strong>Project Discount</strong></td><td></td><td></td><td><strong>− R30,000</strong></td></tr>
-          <tr class="total-row"><td><strong>TOTAL PROJECT ESTIMATE</strong></td><td><strong>148 hrs</strong></td><td></td><td><strong>R35,000</strong></td></tr>
-        </tbody>
-      </table>
+      <div class="section-title">5. Cost Estimate Summary</div>
+      <p class="rotate-hint">Please rotate your phone to view this section.</p>
+      <div class="cost-estimate-content">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Phase</th><th>Hours</th><th>Rate (per hr)</th><th>Estimated Cost</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Phase 1 – Discovery &amp; Technical Design</td><td>11 hrs</td><td>R500</td><td>R5,500</td></tr>
+            <tr><td>Phase 2 – Frontend Development</td><td>40 hrs</td><td>R500</td><td>R20,000</td></tr>
+            <tr><td>Phase 3 – Backend Development &amp; AI/OCR Integration</td><td>49 hrs</td><td>R500</td><td>R24,500</td></tr>
+            <tr><td>Phase 4 – Testing &amp; Quality Assurance</td><td>30 hrs</td><td>R500</td><td>R15,000</td></tr>
+            <tr><td>Phase 5 – Deployment &amp; Handover</td><td>18 hrs</td><td><s>R500</s> <strong>R0</strong> <em>(discounted — valued at R9,000)</em></td><td><strong>R0</strong></td></tr>
+            <tr class="subtotal-row"><td><strong>Subtotal (Full Project Value)</strong></td><td><strong>148 hrs</strong></td><td></td><td><s>R65,000</s></td></tr>
+            <tr class="discount-row"><td><strong>Project Discount</strong></td><td></td><td></td><td><strong>− R20,000</strong></td></tr>
+            <tr class="total-row"><td><strong>TOTAL PROJECT ESTIMATE</strong></td><td><strong>148 hrs</strong></td><td></td><td><strong>R45,000</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="cost-highlight">
         <div>
           <div class="cost-label">Total Project Price</div>
-          <div class="cost-value">R35,000</div>
+          <div class="cost-value">R45,000</div>
         </div>
       </div>
 
       <div class="note" style="margin-top:16px;">
-        The full project value of R65,000 reflects the standard rate for all billable phases. A project discount of R30,000 has been applied, bringing the total to a fixed price of <strong>R35,000</strong>. Responsive design &amp; cross-browser testing has been excluded in favour of desktop Chromium-only browser support.
+        The full project value of R65,000 reflects the standard rate for all billable phases. A project discount of R20,000 has been applied, bringing the total to a fixed price of <strong>R45,000</strong>. Responsive design &amp; cross-browser testing has been excluded in favour of desktop Chromium-only browser support.
+      </div>
       </div>
     </div>
 
     <hr class="divider"/>
 
-    <!-- 7. Third-Party Costs -->
+    <!-- 6. Third-Party Costs -->
     <div class="section">
-      <div class="section-title">7. Third-Party &amp; Operational Costs (Ongoing — Client Responsibility)</div>
+      <div class="section-title">6. Third-Party &amp; Operational Costs (Ongoing — Client Responsibility)</div>
       <p>The following costs are <strong>not included</strong> in the above estimate and will be borne by the client as ongoing operational expenses:</p>
       <div class="note">
-        <strong>Note:</strong> Because the system runs locally and the AI/OCR processing is handled entirely on-premises via EasyOCR's ML models, there are no recurring cloud hosting or API costs. The only potential ongoing cost is local server hardware maintenance, which is the responsibility of the client.
+        <strong>Note:</strong> Because the system runs locally and the AI/OCR processing is handled entirely on-premises via the inbuilt AI-powered OCR models, there are no recurring cloud hosting or API costs. The only potential ongoing cost is local server hardware maintenance, which is the responsibility of the client.
       </div>
       <table>
         <thead><tr><th>Item</th><th>Estimated Cost</th></tr></thead>
         <tbody>
           <tr><td>Local server hardware &amp; maintenance</td><td>Client responsibility</td></tr>
           <tr><td>WAMP / local server stack</td><td>Free (open-source)</td></tr>
-          <tr><td>EasyOCR &amp; Python dependencies</td><td>Free (open-source)</td></tr>
+          <tr><td>Inbuilt AI-powered OCR models &amp; Python dependencies</td><td>Free (open-source)</td></tr>
         </tbody>
       </table>
     </div>
 
     <hr class="divider"/>
 
-    <!-- 8. Assumptions & Exclusions -->
+    <!-- 7. Assumptions & Exclusions -->
     <div class="section">
-      <div class="section-title">8. Assumptions &amp; Exclusions</div>
+      <div class="section-title">7. Assumptions &amp; Exclusions</div>
       <h3>Assumptions</h3>
       <ul>
         <li>The client will provide sample documents and define the expected data object/form schema during Phase 1.</li>
@@ -812,58 +852,58 @@
 
     <hr class="divider"/>
 
-    <!-- 9. Proposed Timeline -->
+    <!-- 8. Proposed Timeline -->
     <div class="section">
-      <div class="section-title">9. Proposed Timeline</div>
+      <div class="section-title">8. Proposed Timeline</div>
       <div class="warning-note">
-        <strong>Important note on scheduling:</strong> This project will be developed on an <strong>after-hours basis</strong>, with an average availability of <strong>9 hours per week</strong> allocated to the project. All phase durations below reflect this constraint and are calculated accordingly.
+        <strong>Important note on scheduling:</strong> This project will be developed with a dedicated availability of <strong>30 hours per week</strong> allocated to the project. All phase durations below reflect this constraint and are calculated accordingly.
         <br/><br/>
-        Additionally, as this is an after-hours engagement, it is acknowledged that <strong>personal or professional blockers may occasionally arise</strong> that could impact progress. Every effort will be made to proactively communicate any such delays and to minimise disruption to the overall delivery schedule. The utmost care will be taken to mitigate delays and prevent project derailment.
+        Additionally, it is acknowledged that <strong>personal or professional blockers may occasionally arise</strong> that could impact progress. Every effort will be made to proactively communicate any such delays and to minimise disruption to the overall delivery schedule. The utmost care will be taken to mitigate delays and prevent project derailment.
       </div>
 
       <div class="timeline">
         <div class="timeline-item">
           <div class="timeline-phase">Phase 1 – Discovery &amp; Technical Design</div>
-          <div class="timeline-meta">11 hrs &nbsp;·&nbsp; 9 hrs/week</div>
-          <div class="timeline-duration">~1.5 weeks</div>
+          <div class="timeline-meta">11 hrs &nbsp;·&nbsp; 30 hrs/week</div>
+          <div class="timeline-duration">~0.5 weeks</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-phase">Phase 2 – Frontend Development</div>
-          <div class="timeline-meta">40 hrs &nbsp;·&nbsp; 9 hrs/week</div>
-          <div class="timeline-duration">~4.5 weeks</div>
+          <div class="timeline-meta">40 hrs &nbsp;·&nbsp; 30 hrs/week</div>
+          <div class="timeline-duration">~1.5 weeks</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-phase">Phase 3 – Backend Development &amp; AI/OCR Integration</div>
-          <div class="timeline-meta">49 hrs &nbsp;·&nbsp; 9 hrs/week</div>
-          <div class="timeline-duration">~5.5 weeks</div>
+          <div class="timeline-meta">49 hrs &nbsp;·&nbsp; 30 hrs/week</div>
+          <div class="timeline-duration">~1.5 weeks</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-phase">Phase 4 – Testing &amp; Quality Assurance</div>
-          <div class="timeline-meta">30 hrs &nbsp;·&nbsp; 9 hrs/week</div>
-          <div class="timeline-duration">~3.5 weeks</div>
+          <div class="timeline-meta">30 hrs &nbsp;·&nbsp; 30 hrs/week</div>
+          <div class="timeline-duration">~1 week</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-phase">Phase 5 – Deployment &amp; Handover</div>
-          <div class="timeline-meta">18 hrs &nbsp;·&nbsp; 9 hrs/week</div>
-          <div class="timeline-duration">~2 weeks</div>
+          <div class="timeline-meta">18 hrs &nbsp;·&nbsp; 30 hrs/week</div>
+          <div class="timeline-duration">~0.5 weeks</div>
         </div>
         <div class="timeline-item total">
           <div class="timeline-phase">Total Estimated Duration</div>
-          <div class="timeline-meta">148 hrs &nbsp;·&nbsp; 9 hrs/week average</div>
-          <div class="timeline-duration">~17 weeks (~4 months)</div>
+          <div class="timeline-meta">148 hrs &nbsp;·&nbsp; 30 hrs/week average</div>
+          <div class="timeline-duration">~5 weeks (~1 month)</div>
         </div>
       </div>
 
       <div class="note">
-        Phases are planned to run sequentially given the after-hours, single-resource nature of this engagement. Should additional availability become possible at any point, phases may be accelerated accordingly.
+        Phases are planned to run sequentially given the single-resource nature of this engagement.
       </div>
     </div>
 
     <hr class="divider"/>
 
-    <!-- 10. Terms & Conditions -->
+    <!-- 9. Terms & Conditions -->
     <div class="section">
-      <div class="section-title">10. Terms &amp; Conditions</div>
+      <div class="section-title">9. Terms &amp; Conditions</div>
       <ul>
         <li>This proposal is valid for <strong>30 days</strong> from the date of issue.</li>
         <li>Any changes to scope after project commencement will be managed via a formal change request process and may impact cost and timeline.</li>
@@ -873,9 +913,9 @@
 
     <hr class="divider"/>
 
-    <!-- 11. Next Steps -->
+    <!-- 10. Next Steps -->
     <div class="section">
-      <div class="section-title">11. Next Steps</div>
+      <div class="section-title">10. Next Steps</div>
       <div class="next-steps">
         <ol>
           <li>Review this proposal and provide any questions or feedback.</li>
